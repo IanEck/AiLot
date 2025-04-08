@@ -70,9 +70,10 @@ function App() {
   const cellRefs = useRef<(HTMLDivElement | null)[]>(Array(rows * cols).fill(null));
 
   const getOriginalPosition = (index: number) => ({
-    x: (index % cols) * (100 / (cols - 1)),
-    y: Math.floor(index / cols) * (100 / (rows - 1))
+    x: (index % cols) * (100 / cols),
+    y: Math.floor(index / cols) * (100 / rows)
   });
+  
 
   const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>, layerIndex: number, slot: 'a' | 'b') => {
     const file = event.target.files?.[0];
