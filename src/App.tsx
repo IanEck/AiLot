@@ -447,7 +447,7 @@ function App() {
                       style={{
                         width: `${cols * 100}%`,
                         height: `${rows * 100}%`,
-                        '--video-pos': pos.backgroundPosition
+                        ['--video-pos']: pos.backgroundPosition
                           ? `${pos.backgroundPosition.x}% ${pos.backgroundPosition.y}%`
                           : `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`
                       } as React.CSSProperties}
