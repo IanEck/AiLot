@@ -265,7 +265,7 @@ function App() {
               className="rounded border border-black"
               onClick={() => alert('GET TICKETS clicked!')}
             >
-              GET TICKETS
+              JOIN WAITLIST
             </button>
 
             <button
@@ -445,13 +445,13 @@ function App() {
                       }}
                       onTimeUpdate={(e) => handleVideoTimeUpdate(e, layerIndex, i)}
                       style={{
-                        width: `${cols * 100}%`, // Ensures the video takes up the entire width of all columns
-                        height: `${rows * 100}%`, // Ensures the video takes up the entire height of all rows
-                        objectPosition: pos.backgroundPosition
+                        width: `${cols * 100}%`,
+                        height: `${rows * 100}%`,
+                        '--video-pos': pos.backgroundPosition
                           ? `${pos.backgroundPosition.x}% ${pos.backgroundPosition.y}%`
-                          : `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%` // Correct tile position
-                      }}
-                      className="absolute w-full h-full object-cover"
+                          : `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`
+                      } as React.CSSProperties}
+                      className="absolute w-full h-full object-cover video-tile"
                       src={mediaSlots[layerIndex]?.b.url}
                       muted
                       playsInline

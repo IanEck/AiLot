@@ -203,3 +203,8 @@ div:hover .noise-overlay {
 .font-space-grotesk {
   font-family: 'Space Grotesk', sans-serif;
 }
+
+.video-tile {
+  object-fit: cover;
+  object-position: var(--video-pos) !important;
+}
