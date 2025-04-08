@@ -202,7 +202,16 @@ div:hover .noise-overlay {
 
 .font-space-grotesk {
   font-family: 'Space Grotesk', sans-serif;
+  font-weight: 300;
+  font-size: 48px;
 }
+
+@media only screen and (max-width: 768px) {
+  .font-space-grotesk {
+    font-size: 28px;
+  }
+}
+
 
 .video-tile {
   object-fit: cover;
