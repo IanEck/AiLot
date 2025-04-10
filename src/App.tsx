@@ -232,29 +232,29 @@ useEffect(() => {
             {mediaSlots[positions[0]?.activeLayer]?.a.header}
           </h2>
           <div className="flex gap-2 mt-4">
-            <button
-              style={{
-                width: '192px',
-                height: '62px',
-                top: '605.17px',
-                left: '99px',
-                borderWidth: '1px',
-                padding: '0 27.35px',
-                gap: '9.12px',
-                backgroundColor: 'white',
-                color: 'black',
-                fontFamily: 'Space Mono, monospace',
-                fontWeight: 700,
-                fontSize: '14px',
-                lineHeight: '100%',
-                letterSpacing: '1.14px',
-                textAlign: 'center',
-              }}
-              className="rounded-none border border-black"
-              onClick={() => alert('GET TICKETS clicked!')}
-            >
-              JOIN WAITLIST
-            </button>
+          <button
+  style={{
+    width: '192px',
+    height: '62px',
+    top: '605.17px',
+    left: '99px',
+    borderWidth: '1px',
+    padding: '0 27.35px',
+    gap: '9.12px',
+    backgroundColor: 'white',
+    color: 'black',
+    fontFamily: 'Space Mono, monospace',
+    fontWeight: 700,
+    fontSize: '14px',
+    lineHeight: '100%',
+    letterSpacing: '1.14px',
+    textAlign: 'center',
+  }}
+  className="rounded-none border border-black"
+  onClick={() => window.open("https://airtable.com/appRpU91ro4CMTHVd/paghic61rXUeGaece/form", "_blank")}
+>
+  JOIN WAITLIST
+</button>
 
             <button
               onClick={() => handleCascadingFlip('right', 'right')}
