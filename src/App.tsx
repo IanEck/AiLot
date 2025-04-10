@@ -349,7 +349,8 @@ function App() {
                       placeholder="Enter header text..."
                     />
                   </div>
-
+                  
+                  {/*
                   <div>
                     <input
                       type="file"
@@ -366,6 +367,8 @@ function App() {
                       Upload Fullscreen Media
                     </button>
                   </div>
+                  */}
+
 
                   <div className="space-y-2">
                     <label className="block text-sm text-gray-300">Grid Header</label>
@@ -378,6 +381,7 @@ function App() {
                     />
                   </div>
 
+                  {/*
                   <div>
                     <input
                       type="file"
@@ -394,6 +398,8 @@ function App() {
                       Upload Grid Media
                     </button>
                   </div>
+                  */}
+
                 </div>
               ))}
             </div>
