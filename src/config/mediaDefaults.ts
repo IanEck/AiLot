@@ -12,20 +12,20 @@ export type MediaItem = {
   
   export const defaultMediaSlots: MediaSlot[] = [
     {
-      a: { type: 'video', url: '/videos/eye-gradient.mp4', header: 'What’s the ceiling on AI video models?' },
-      b: { type: 'video', url: '/videos/eye.mp4', header: 'What’s the ceiling on AI video models?' }
+      a: { type: 'video', url: '/videos/eye-pit-gradient.mp4', header: 'What’s the ceiling on AI video models?' },
+      b: { type: 'video', url: '/videos/eye-pit.mp4', header: 'What’s the ceiling on AI video models?' }
     },
     {
-      a: { type: 'video', url: '/videos/eye-pit-gradient.mp4', header: 'When the tech improves every week, what is timeless?' },
-      b: { type: 'video', url: '/videos/eye-pit.mp4', header: 'When the tech improves every week, what is timeless?' }
+      a: { type: 'video', url: '/videos/eye-light-gradient.mp4', header: 'When the tech improves every week, what is timeless?' },
+      b: { type: 'video', url: '/videos/eye-light.mp4', header: 'When the tech improves every week, what is timeless?' }
     },
     {
       a: { type: 'video', url: '/videos/eye-gradient.mp4', header: 'Can you direct a dataset?' },
       b: { type: 'video', url: '/videos/eye.mp4', header: 'Can you direct a dataset?' }
     },
     {
-      a: { type: 'video', url: '/videos/eye-pit-gradient.mp4', header: 'What jobs will AI create in the media industry?' },
-      b: { type: 'video', url: '/videos/eye-pit.mp4', header: 'What jobs will AI create in the media industry?' }
+      a: { type: 'video', url: '/videos/eye-lens-gradient.mp4', header: 'What jobs will AI create in the media industry?' },
+      b: { type: 'video', url: '/videos/eye-lens.mp4', header: 'What jobs will AI create in the media industry?' }
     }
   ];
   
