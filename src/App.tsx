@@ -4,6 +4,8 @@ import img1 from './assets/image1.jpg'
 import img2 from './assets/image2.jpg'
 import img3 from './assets/image3.jpg'
 import img4 from './assets/image4.jpg'
+import { defaultMediaSlots } from './config/mediaDefaults';
+
 
 
 
@@ -28,24 +30,8 @@ type MediaSlot = {
 function App() {
   const [showControls, setShowControls] = useState(false);
   const [isFlipping, setIsFlipping] = useState(false);
-  const [mediaSlots, setMediaSlots] = useState<MediaSlot[]>([
-    {
-      a: { type: 'image', url: img1, header: "Are we outsourcing creativity—or igniting it?" },
-      b: { type: 'image', url: img1 }
-    },
-    {
-      a: { type: 'image', url: img2, header: "Are we outsourcing creativity—or igniting it?" },
-      b: { type: 'image', url: img2 }
-    },
-    {
-      a: { type: 'image', url: img3, header: "Are we outsourcing creativity—or igniting it?" },
-      b: { type: 'image', url: img3 }
-    },
-    {
-      a: { type: 'image', url: img4, header: "Are we outsourcing creativity—or igniting it?" },
-      b: { type: 'image', url: img4 }
-    }
-  ]);
+  const [mediaSlots, setMediaSlots] = useState(defaultMediaSlots);
+
 
   // Locked settings
   const rows = 1;
@@ -320,7 +306,6 @@ function App() {
       </div>
 
       <div className="relative md:w-1/2 w-full md:h-full h-1/2 md:border-none border-t-[0.5rem] border-black">
-        {/*
         <button
           onClick={() => setShowControls(!showControls)}
           className="fixed top-4 right-4 z-[1000] p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
@@ -491,7 +476,6 @@ function App() {
             ))}
           </div>
         ))}
-        */}
       </div>
     </div>
   );
