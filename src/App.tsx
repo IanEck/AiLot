@@ -234,8 +234,8 @@ useEffect(() => {
           <div className="flex gap-2 mt-4">
             <button
               style={{
-                width: '184.645px',
-                height: '63.828px',
+                width: '192px',
+                height: '56px',
                 top: '605.17px',
                 left: '99px',
                 borderWidth: '1px',
