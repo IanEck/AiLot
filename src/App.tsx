@@ -142,15 +142,7 @@ function App() {
     // 1. Trigger a temporary state for left panel animation
     const newFlipDirection = direction === 'left' ? 'right' : 'left';
 
-    // Use first tile to manage the left panel animation state
-    setPositions((prev) => {
-      const updated = [...prev];
-      updated[0] = {
-        ...updated[0],
-        flipDirection: newFlipDirection,
-      };
-      return updated;
-    });
+
 
     // Wait for left panel animation to complete before tile flips
     const leftPanelDuration = 600;
