@@ -230,7 +230,7 @@ function App() {
           <h2 className="text-white text-4xl font-bold drop-shadow-lg mb-4 font-space-grotesk">
             {mediaSlots[positions[0]?.activeLayer]?.a.header}
           </h2>
-          <div className="flex gap-2">
+          <div className="flex gap-2 mt-4">
             <button
               style={{
                 width: '184.645px',
@@ -243,13 +243,13 @@ function App() {
                 backgroundColor: 'white',
                 color: 'black',
                 fontFamily: 'Space Mono, monospace',
-                fontWeight: 400,
+                fontWeight: 700,
                 fontSize: '14px',
                 lineHeight: '100%',
                 letterSpacing: '1.14px',
                 textAlign: 'center',
               }}
-              className="rounded border border-black"
+              className="rounded-none border border-black"
               onClick={() => alert('GET TICKETS clicked!')}
             >
               JOIN WAITLIST
