@@ -239,7 +239,7 @@ useEffect(() => {
                 top: '605.17px',
                 left: '99px',
                 borderWidth: '1px',
-                padding: '27.35px',
+                padding: '0 27.35px',
                 gap: '9.12px',
                 backgroundColor: 'white',
                 color: 'black',
