@@ -320,6 +320,7 @@ function App() {
       </div>
 
       <div className="relative md:w-1/2 w-full md:h-full h-1/2 md:border-none border-t-[0.5rem] border-black">
+        {/*
         <button
           onClick={() => setShowControls(!showControls)}
           className="fixed top-4 right-4 z-[1000] p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
@@ -350,7 +351,6 @@ function App() {
                     />
                   </div>
                   
-                  {/*
                   <div>
                     <input
                       type="file"
@@ -367,8 +367,6 @@ function App() {
                       Upload Fullscreen Media
                     </button>
                   </div>
-                  */}
-
 
                   <div className="space-y-2">
                     <label className="block text-sm text-gray-300">Grid Header</label>
@@ -381,7 +379,6 @@ function App() {
                     />
                   </div>
 
-                  {/*
                   <div>
                     <input
                       type="file"
@@ -398,8 +395,6 @@ function App() {
                       Upload Grid Media
                     </button>
                   </div>
-                  */}
-
                 </div>
               ))}
             </div>
@@ -496,6 +491,7 @@ function App() {
             ))}
           </div>
         ))}
+        */}
       </div>
     </div>
   );
