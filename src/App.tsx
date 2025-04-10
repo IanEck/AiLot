@@ -213,6 +213,17 @@ function App() {
     document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
   }, []);
 
+  // <-- Add the auto-flip effect here:
+useEffect(() => {
+  const autoFlipInterval = setInterval(() => {
+    if (!isFlipping) {
+      handleCascadingFlip('right', 'right');
+    }
+  }, 8000); // Flip every 8 seconds
+
+  return () => clearInterval(autoFlipInterval);
+}, [isFlipping]);
+
   return (
     <div className="relative w-screen h-screen bg-gray-900 overflow-hidden flex flex-col-reverse md:flex-row border-[0.5rem] border-black">
       <div className="md:w-1/2 w-full md:h-full h-1/2 bg-gray-900 relative overflow-hidden md:border-r-[0.5rem] md:border-black">
