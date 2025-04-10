@@ -1,12 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Settings2, X, Upload, ArrowRight } from 'lucide-react';
-import img1 from './assets/image1.jpg'
-import img2 from './assets/image2.jpg'
-import img3 from './assets/image3.jpg'
-import img4 from './assets/image4.jpg'
 import { defaultMediaSlots } from './config/mediaDefaults';
-
-
 
 
 type Position = {
@@ -45,9 +39,13 @@ function App() {
   const blurAmount = 0;
 
   const [positions, setPositions] = useState<Position[]>(
-    Array(rows * cols).fill({ activeLayer: 0, transitionDelay: 0, flipDirection: null })
+    Array.from({ length: rows * cols }, () => ({
+      activeLayer: 0,
+      transitionDelay: 0,
+      flipDirection: null
+    }))
   );
-
+  
   const fileInputRefs = Array(8).fill(0).map(() => useRef<HTMLInputElement>(null));
   const videoRefs = useRef<(HTMLVideoElement | null)[][]>(
     Array(numLayers).fill(null).map(() => Array(rows * cols).fill(null))
