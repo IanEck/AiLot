@@ -238,8 +238,8 @@ function App() {
   }, []);
 
   return (
-    <div className="relative w-screen h-screen bg-gray-900 overflow-hidden flex flex-col-reverse md:flex-row">
-      <div className="md:w-1/2 w-full md:h-full h-1/2 bg-gray-900 relative overflow-hidden">
+    <div className="relative w-screen h-screen bg-gray-900 overflow-hidden flex flex-col-reverse md:flex-row border-[0.5rem] border-black">
+      <div className="md:w-1/2 w-full md:h-full h-1/2 bg-gray-900 relative overflow-hidden md:border-r-[0.5rem] md:border-black">
         <div className="absolute inset-0 z-10 flex flex-col items-start justify-center p-6">
           <h2 className="text-white text-4xl font-bold drop-shadow-lg mb-4 font-space-grotesk">
             {mediaSlots[positions[0]?.activeLayer]?.a.header}
@@ -319,7 +319,7 @@ function App() {
         ))}
       </div>
 
-      <div className="relative md:w-1/2 w-full md:h-full h-1/2">
+      <div className="relative md:w-1/2 w-full md:h-full h-1/2 md:border-none border-t-[0.5rem] border-black">
         <button
           onClick={() => setShowControls(!showControls)}
           className="fixed top-4 right-4 z-[1000] p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
