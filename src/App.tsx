@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Settings2, X, Upload, ArrowRight } from 'lucide-react';
 import { defaultMediaSlots } from './config/mediaDefaults';
+import useIsMobile from './hooks/useIsMobile';
+
+function App() {
+  const isMobile = useIsMobile();
 
 
 type Position = {
@@ -288,7 +292,8 @@ useEffect(() => {
             <video
               ref={el => fullscreenVideoRefs.current[layerIndex] = el}
               className="absolute w-full h-full object-cover"
-              src={mediaSlots[layerIndex]?.a.url}
+              // If mobile and a mobileUrl exists, use it; otherwise fall back to the desktop URL.
+              src={isMobile && mediaSlots[layerIndex]?.a.mobileUrl ? mediaSlots[layerIndex].a.mobileUrl : mediaSlots[layerIndex].a.url}
               poster={mediaSlots[layerIndex]?.a.fallbackUrl || ''}
               muted
               playsInline
@@ -442,7 +447,7 @@ useEffect(() => {
                           : `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`
                       } as React.CSSProperties}
                       className="absolute w-full h-full object-cover video-tile"
-                      src={mediaSlots[layerIndex]?.b.url}
+                      src={isMobile && mediaSlots[layerIndex]?.b.mobileUrl ? mediaSlots[layerIndex].b.mobileUrl : mediaSlots[layerIndex].b.url}
                       poster={mediaSlots[layerIndex]?.b.fallbackUrl || ''}
                       muted
                       playsInline
