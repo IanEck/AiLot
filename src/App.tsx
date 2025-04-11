@@ -31,7 +31,7 @@ function App() {
 
   // Locked settings
   const rows = 1;
-  const cols = 8;
+  const cols = 1;
   const gapSize = 0;
   const cornerRadius = 0;
   const numLayers = 3;
@@ -417,18 +417,20 @@ useEffect(() => {
               >
                 {mediaSlots[layerIndex]?.b.type === 'video' ? (
                   <div
-                    className={`absolute inset-0 transition-all duration-300 ${pos.activeLayer === layerIndex
+                  className={`absolute inset-0 transition-all duration-300 ${
+                    pos.activeLayer === layerIndex
                       ? pos.flipDirection === 'right'
-                        ? 'flip-right-in'
+                        ? 'slide-right-in'
                         : pos.flipDirection === 'left'
-                          ? 'flip-left-in'
+                          ? 'slide-left-in'
                           : ''
                       : pos.flipDirection === 'right'
-                        ? 'flip-right-out'
+                        ? 'slide-right-out'
                         : pos.flipDirection === 'left'
-                          ? 'flip-left-out'
+                          ? 'slide-left-out'
                           : ''
-                      }`}
+                  }`}
+                  
                   >
                     <video
                       ref={el => {
@@ -455,18 +457,20 @@ useEffect(() => {
                   </div>
                 ) : (
                   <div
-                    className={`absolute inset-0 transition-all duration-300 ${pos.activeLayer === layerIndex
+                  className={`absolute inset-0 transition-all duration-300 ${
+                    pos.activeLayer === layerIndex
                       ? pos.flipDirection === 'right'
-                        ? 'flip-right-in'
+                        ? 'slide-right-in'
                         : pos.flipDirection === 'left'
-                          ? 'flip-left-in'
+                          ? 'slide-left-in'
                           : ''
                       : pos.flipDirection === 'right'
-                        ? 'flip-right-out'
+                        ? 'slide-right-out'
                         : pos.flipDirection === 'left'
-                          ? 'flip-left-out'
+                          ? 'slide-left-out'
                           : ''
-                      }`}
+                  }`}
+                  
                     style={{
                       backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
                       backgroundSize: `${cols * 100}% ${rows * 100}%`,
