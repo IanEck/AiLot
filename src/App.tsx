@@ -393,98 +393,100 @@ useEffect(() => {
         </div>
 
         {Array(numLayers).fill(0).map((_, layerIndex) => (
-  <div
-    key={layerIndex}
-    className="absolute inset-0 grid"
-    // grid styles...
-  >
-    {positions.map((pos, i) => (
-      <div
-        key={`mask${layerIndex}-${i}`}
-        ref={el => cellRefs.current[i] = el}
-        className={`relative overflow-hidden [perspective:1000px] ${
-          numLayers === 1 || pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'
-        }`}
-        style={{
-          borderRadius: `${cornerRadius}px`,
-          transitionDelay: `${pos.transitionDelay}ms`
-        }}
-      >
-        {mediaSlots[layerIndex]?.b.type === 'video' ? (
-          // Update this inner div:
           <div
-            className={`absolute inset-0 transition-all duration-300 ${
-              // Insert the modified conditional classes here:
-              pos.activeLayer === layerIndex
-                ? isMobile
-                  ? pos.flipDirection === 'right'
-                    ? 'slide-left-in'
-                    : pos.flipDirection === 'left'
-                      ? 'slide-right-in'
-                      : ''
-                  : pos.flipDirection === 'right'
-                    ? 'slide-right-in'
-                    : pos.flipDirection === 'left'
-                      ? 'slide-left-in'
-                      : ''
-                : isMobile
-                  ? pos.flipDirection === 'right'
-                    ? 'slide-left-out'
-                    : pos.flipDirection === 'left'
-                      ? 'slide-right-out'
-                      : ''
-                  : pos.flipDirection === 'right'
-                    ? 'slide-right-out'
-                    : pos.flipDirection === 'left'
-                      ? 'slide-left-out'
-                      : ''
-            }`}
-          >
-            {/* video element here */}
-          </div>
-        ) : (
-          // And similarly in the non-video branch.
-          <div
-            className={`absolute inset-0 transition-all duration-300 ${
-              pos.activeLayer === layerIndex
-                ? isMobile
-                  ? pos.flipDirection === 'right'
-                    ? 'slide-left-in'
-                    : pos.flipDirection === 'left'
-                      ? 'slide-right-in'
-                      : ''
-                  : pos.flipDirection === 'right'
-                    ? 'slide-right-in'
-                    : pos.flipDirection === 'left'
-                      ? 'slide-left-in'
-                      : ''
-                : isMobile
-                  ? pos.flipDirection === 'right'
-                    ? 'slide-left-out'
-                    : pos.flipDirection === 'left'
-                      ? 'slide-right-out'
-                      : ''
-                  : pos.flipDirection === 'right'
-                    ? 'slide-right-out'
-                    : pos.flipDirection === 'left'
-                      ? 'slide-left-out'
-                      : ''
-            }`}
+            key={layerIndex}
+            className="absolute inset-0 grid"
             style={{
-              backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
-              backgroundSize: `${cols * 100}% ${rows * 100}%`,
-              backgroundPosition: `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`,
-              backgroundRepeat: 'no-repeat',
-              border: '1px solid black',
+              gridTemplateColumns: `repeat(${cols}, 1fr)`,
+              gridTemplateRows: `repeat(${rows}, 1fr)`,
+              gap: `${gapSize}px`,
+              zIndex: layerIndex + 10,
+              padding: 0
             }}
-          />
-        )}
-        <div className="noise-overlay" />
-      </div>
-    ))}
-  </div>
-))}
+          >
+            {positions.map((pos, i) => (
+              <div
+                key={`mask${layerIndex}-${i}`}
+                ref={el => cellRefs.current[i] = el}
+                className={`relative overflow-hidden [perspective:1000px] ${numLayers === 1 || pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'
+                  }`}
+                style={{
+                  borderRadius: `${cornerRadius}px`,
+                  transitionDelay: `${pos.transitionDelay}ms`
+                }}
+              >
+                {mediaSlots[layerIndex]?.b.type === 'video' ? (
+                  <div
+                  className={`absolute inset-0 transition-all duration-300 ${
+                    pos.activeLayer === layerIndex
+                      ? pos.flipDirection === 'right'
+                        ? 'slide-right-in'
+                        : pos.flipDirection === 'left'
+                          ? 'slide-left-in'
+                          : ''
+                      : pos.flipDirection === 'right'
+                        ? 'slide-right-out'
+                        : pos.flipDirection === 'left'
+                          ? 'slide-left-out'
+                          : ''
+                  }`}
+                  
+                  >
+                    <video
+                      ref={el => {
+                        if (videoRefs.current[layerIndex]) {
+                          videoRefs.current[layerIndex][i] = el;
+                        }
+                      }}
+                      onTimeUpdate={(e) => handleVideoTimeUpdate(e, layerIndex, i)}
+                      style={{
+                        width: `${cols * 100}%`,
+                        height: `${rows * 100}%`,
+                        ['--video-pos']: pos.backgroundPosition
+                          ? `${pos.backgroundPosition.x}% ${pos.backgroundPosition.y}%`
+                          : `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`
+                      } as React.CSSProperties}
+                      className="absolute w-full h-full object-cover video-tile"
+                      src={isMobile && mediaSlots[layerIndex]?.b.mobileUrl ? mediaSlots[layerIndex].b.mobileUrl : mediaSlots[layerIndex].b.url}
+                      poster={mediaSlots[layerIndex]?.b.fallbackUrl || ''}
+                      muted
+                      playsInline
+                      loop
+                      autoPlay
+                    />
+                  </div>
+                ) : (
+                  <div
+                  className={`absolute inset-0 transition-all duration-300 ${
+                    pos.activeLayer === layerIndex
+                      ? pos.flipDirection === 'right'
+                        ? 'slide-right-in'
+                        : pos.flipDirection === 'left'
+                          ? 'slide-left-in'
+                          : ''
+                      : pos.flipDirection === 'right'
+                        ? 'slide-right-out'
+                        : pos.flipDirection === 'left'
+                          ? 'slide-left-out'
+                          : ''
+                  }`}
+                  
+                    style={{
+                      backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
+                      backgroundSize: `${cols * 100}% ${rows * 100}%`,
+                      backgroundPosition: `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`,
+                      backgroundRepeat: 'no-repeat',
+                      border: '1px solid black',
 
+                    }}
+                  />
+
+                )}
+                <div className="noise-overlay" />
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );
