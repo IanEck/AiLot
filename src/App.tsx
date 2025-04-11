@@ -3,9 +3,6 @@ import { Settings2, X, Upload, ArrowRight } from 'lucide-react';
 import { defaultMediaSlots } from './config/mediaDefaults';
 import useIsMobile from './hooks/useIsMobile';
 
-function App() {
-  const isMobile = useIsMobile();
-
 
 type Position = {
   activeLayer: number;
@@ -26,6 +23,7 @@ type MediaSlot = {
 };
 
 function App() {
+  const isMobile = useIsMobile();
   const [showControls, setShowControls] = useState(false);
   const [isFlipping, setIsFlipping] = useState(false);
   const [mediaSlots, setMediaSlots] = useState(defaultMediaSlots);
