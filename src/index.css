@@ -218,3 +218,20 @@ div:hover .noise-overlay {
   object-fit: cover;
   object-position: var(--video-pos) !important;
 }
+
+@keyframes flipCell {
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(1000px) rotateY(90deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+}
+
+/* This class will be applied to each grid overlay cell when we want it to flip */
+.flipping {
+  animation: flipCell 600ms ease-in-out forwards;
+}

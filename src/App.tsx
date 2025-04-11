@@ -38,6 +38,8 @@ function App() {
   const floatDepth = 16;
   const blurAmount = 0;
 
+  const [isOverlayFlipping, setOverlayFlipping] = useState(false);
+
   const [positions, setPositions] = useState<Position[]>(
     Array.from({ length: rows * cols }, () => ({
       activeLayer: 0,
@@ -138,72 +140,40 @@ function App() {
   const handleCascadingFlip = (direction: 'right' | 'left', startPoint: 'right' | 'left') => {
     if (isFlipping) return;
     setIsFlipping(true);
-
-    // 1. Trigger a temporary state for left panel animation
-    const newFlipDirection = direction === 'left' ? 'right' : 'left';
-
-
-
-    // Wait for left panel animation to complete before tile flips
-    const leftPanelDuration = 600;
-
+  
+    // Trigger the overlay animation for the unified grid panel.
+    setOverlayFlipping(true);
+  
+    // (Optional: You could also run your left-panel cascade logic here if needed.
+    // For the unified grid, however, we update all at once.)
+    
+    // Wait for the overlay animation to play out (600ms in our CSS).
     setTimeout(() => {
-      const cellsByCol: number[][] = Array(cols).fill(0).map(() => []);
-
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const index = r * cols + c;
-          cellsByCol[c].push(index);
-        }
-      }
-
-      let sequence: number[] = [];
-
-      if (startPoint === 'right') {
-        for (let c = 0; c < cols; c++) {
-          sequence = [...sequence, ...cellsByCol[c]];
-        }
-      } else {
-        for (let c = cols - 1; c >= 0; c--) {
-          sequence = [...sequence, ...cellsByCol[c]];
-        }
-      }
-
-      const totalTiles = sequence.length;
-      const totalDuration = 500;
-      const delayBetweenTiles = totalTiles <= 1 ? 0 : totalDuration / (totalTiles - 1);
-
-      const flipTile = (index: number, delay: number) => {
-        setTimeout(() => {
-          setPositions(currentPositions => {
-            const updatedPositions = [...currentPositions];
-            const currentLayer = updatedPositions[index].activeLayer;
-            const nextLayer = direction === 'left'
+      // Update every cell's activeLayer in one go.
+      setPositions(prev =>
+        prev.map(pos => {
+          const currentLayer = pos.activeLayer;
+          const nextLayer =
+            direction === 'left'
               ? (currentLayer + 1) % numLayers
               : (currentLayer - 1 + numLayers) % numLayers;
-
-            updatedPositions[index] = {
-              activeLayer: nextLayer,
-              transitionDelay: 0,
-              backgroundPosition: getOriginalPosition(index),
-              flipDirection: newFlipDirection,
-            };
-
-            return updatedPositions;
-          });
-
-          if (index === sequence[sequence.length - 1]) {
-            setTimeout(() => setIsFlipping(false), 600);
-          }
-        }, delay);
-      };
-
-      sequence.forEach((index, position) => {
-        flipTile(index, position * delayBetweenTiles);
-      });
-
-    }, leftPanelDuration);
+          return {
+            activeLayer: nextLayer,
+            transitionDelay: 0,
+            // In the unified approach, individual cell background positions are not used,
+            // but we can assign the default value.
+            backgroundPosition: getOriginalPosition(0),
+            flipDirection: direction === 'left' ? 'right' : 'left'
+          };
+        })
+      );
+  
+      // Clear the overlay animation and flipping flag.
+      setOverlayFlipping(false);
+      setIsFlipping(false);
+    }, 600); // Should match your CSS animation duration for .flipping
   };
+  
 
 
   useEffect(() => {
@@ -316,171 +286,42 @@ useEffect(() => {
           {showControls ? <X className="w-6 h-6 text-white" /> : <Settings2 className="w-6 h-6 text-white" />}
         </button>
 
-        <div
-          className={`fixed right-0 top-0 h-full w-full md:w-80 bg-gray-800 p-6 transform transition-transform duration-300 ease-in-out z-[999] overflow-y-auto ${showControls ? 'translate-x-0' : 'translate-x-full'
-            }`}
-        >
-          <h2 className="text-white text-xl font-bold mb-6">Media Controls</h2>
+        {/* Unified video container */}
+        <div className="relative w-full h-full overflow-hidden">
+          {/* Render the unified video using the active media slot for grid (slot "b").
+              Adjust positions[0].activeLayer as needed if you cycle through layers. */}
+          <video
+            src={mediaSlots[positions[0]?.activeLayer]?.b.url}
+            poster={mediaSlots[positions[0]?.activeLayer]?.b.fallbackUrl || ''}
+            muted
+            playsInline
+            loop
+            autoPlay
+            className="absolute top-0 left-0 object-cover"
+            style={{ width: `${cols * 100}%`, height: '100%' }}
+          />
 
-          <div className="space-y-6">
-            <div className="space-y-4">
-              {Array(numLayers).fill(0).map((_, index) => (
-                <div key={index} className="space-y-4 border-b border-gray-700 pb-4">
-                  <h4 className="text-white font-medium">Layer {index + 1}</h4>
-
-                  <div className="space-y-2">
-                    <label className="block text-sm text-gray-300">Fullscreen Header</label>
-                    <input
-                      type="text"
-                      value={mediaSlots[index]?.a.header || ''}
-                      onChange={(e) => handleHeaderChange(index, 'a', e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-700 rounded-lg text-white"
-                      placeholder="Enter header text..."
-                    />
-                  </div>
-                  
-                  <div>
-                    <input
-                      type="file"
-                      ref={fileInputRefs[index * 2]}
-                      onChange={(e) => handleMediaUpload(e, index, 'a')}
-                      accept="image/*,video/mp4"
-                      className="hidden"
-                    />
-                    <button
-                      onClick={() => fileInputRefs[index * 2].current?.click()}
-                      className="w-full p-3 flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white transition-colors"
-                    >
-                      <Upload className="w-4 h-4" />
-                      Upload Fullscreen Media
-                    </button>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="block text-sm text-gray-300">Grid Header</label>
-                    <input
-                      type="text"
-                      value={mediaSlots[index]?.b.header || ''}
-                      onChange={(e) => handleHeaderChange(index, 'b', e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-700 rounded-lg text-white"
-                      placeholder="Enter header text..."
-                    />
-                  </div>
-
-                  <div>
-                    <input
-                      type="file"
-                      ref={fileInputRefs[index * 2 + 1]}
-                      onChange={(e) => handleMediaUpload(e, index, 'b')}
-                      accept="image/*,video/mp4"
-                      className="hidden"
-                    />
-                    <button
-                      onClick={() => fileInputRefs[index * 2 + 1].current?.click()}
-                      className="w-full p-3 flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white transition-colors"
-                    >
-                      <Upload className="w-4 h-4" />
-                      Upload Grid Media
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {Array(numLayers).fill(0).map((_, layerIndex) => (
+          {/* Grid overlay: divides the unified video into 8 columns and applies a staggered flip animation */}
           <div
-            key={layerIndex}
-            className="absolute inset-0 grid"
-            style={{
-              gridTemplateColumns: `repeat(${cols}, 1fr)`,
-              gridTemplateRows: `repeat(${rows}, 1fr)`,
-              gap: `${gapSize}px`,
-              zIndex: layerIndex + 10,
-              padding: 0
-            }}
+            className="absolute top-0 left-0 w-full h-full pointer-events-none grid"
+            style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
           >
-            {positions.map((pos, i) => (
+            {Array.from({ length: cols }).map((_, i) => (
               <div
-                key={`mask${layerIndex}-${i}`}
-                ref={el => cellRefs.current[i] = el}
-                className={`relative overflow-hidden [perspective:1000px] ${numLayers === 1 || pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'
-                  }`}
-                style={{
-                  borderRadius: `${cornerRadius}px`,
-                  transitionDelay: `${pos.transitionDelay}ms`
-                }}
+                key={i}
+                className="w-full h-full overflow-hidden relative"
+                // Apply staggered animation delay if overlay flipping is active
+                style={{ animationDelay: isOverlayFlipping ? `${i * 50}ms` : undefined }}
               >
-                {mediaSlots[layerIndex]?.b.type === 'video' ? (
-                  <div
-                    className={`absolute inset-0 transition-all duration-300 ${pos.activeLayer === layerIndex
-                      ? pos.flipDirection === 'right'
-                        ? 'flip-right-in'
-                        : pos.flipDirection === 'left'
-                          ? 'flip-left-in'
-                          : ''
-                      : pos.flipDirection === 'right'
-                        ? 'flip-right-out'
-                        : pos.flipDirection === 'left'
-                          ? 'flip-left-out'
-                          : ''
-                      }`}
-                  >
-                    <video
-                      ref={el => {
-                        if (videoRefs.current[layerIndex]) {
-                          videoRefs.current[layerIndex][i] = el;
-                        }
-                      }}
-                      onTimeUpdate={(e) => handleVideoTimeUpdate(e, layerIndex, i)}
-                      style={{
-                        width: `${cols * 100}%`,
-                        height: `${rows * 100}%`,
-                        ['--video-pos']: pos.backgroundPosition
-                          ? `${pos.backgroundPosition.x}% ${pos.backgroundPosition.y}%`
-                          : `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`
-                      } as React.CSSProperties}
-                      className="absolute w-full h-full object-cover video-tile"
-                      src={mediaSlots[layerIndex]?.b.url}
-                      poster={mediaSlots[layerIndex]?.b.fallbackUrl || ''}
-                      muted
-                      playsInline
-                      loop
-                      autoPlay
-                    />
-                  </div>
-                ) : (
-                  <div
-                    className={`absolute inset-0 transition-all duration-300 ${pos.activeLayer === layerIndex
-                      ? pos.flipDirection === 'right'
-                        ? 'flip-right-in'
-                        : pos.flipDirection === 'left'
-                          ? 'flip-left-in'
-                          : ''
-                      : pos.flipDirection === 'right'
-                        ? 'flip-right-out'
-                        : pos.flipDirection === 'left'
-                          ? 'flip-left-out'
-                          : ''
-                      }`}
-                    style={{
-                      backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
-                      backgroundSize: `${cols * 100}% ${rows * 100}%`,
-                      backgroundPosition: `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`,
-                      backgroundRepeat: 'no-repeat',
-                      border: '1px solid black',
-
-                    }}
-                  />
-
+                {isOverlayFlipping && (
+                  <div className="absolute top-0 left-0 w-full h-full flipping" />
                 )}
-                <div className="noise-overlay" />
               </div>
             ))}
           </div>
-        ))}
+        </div>
       </div>
+
     </div>
   );
 }
