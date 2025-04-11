@@ -62,22 +62,6 @@ export type MediaItem = {
         header: 'Can you direct a dataset?',
         fallbackUrl: '/images/eye-pit_1.4.1.webp'
       }
-    },
-    {
-      a: { 
-        type: 'video', 
-        url: '/videos/eye-lens-gradient-compressed.mp4', 
-        mobileUrl: '/videos/eye-lens-gradient-compressed-mobile.mp4',
-        header: 'What jobs will AI create in the media industry?',
-        fallbackUrl: '/images/eye-lens-gradient_2.2.1.webp'
-      },
-      b: { 
-        type: 'video', 
-        url: '/videos/eye-lens-compressed.mp4', 
-        mobileUrl: '/videos/eye-lens-compressed-mobile.mp4',
-        header: 'What jobs will AI create in the media industry?',
-        fallbackUrl: '/images/eye-cloud_1.2.1.webp'
-      }
     }
   ];
   
