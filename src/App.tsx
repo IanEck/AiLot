@@ -408,8 +408,7 @@ useEffect(() => {
               <div
                 key={`mask${layerIndex}-${i}`}
                 ref={el => cellRefs.current[i] = el}
-                className={`relative overflow-hidden [perspective:1000px] ${numLayers === 1 || pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'
-                  }`}
+                className={`relative overflow-hidden [perspective:1000px] ${numLayers === 1 || pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'}`}
                 style={{
                   borderRadius: `${cornerRadius}px`,
                   transitionDelay: `${pos.transitionDelay}ms`
@@ -417,20 +416,31 @@ useEffect(() => {
               >
                 {mediaSlots[layerIndex]?.b.type === 'video' ? (
                   <div
-                  className={`absolute inset-0 transition-all duration-300 ${
-                    pos.activeLayer === layerIndex
-                      ? pos.flipDirection === 'right'
-                        ? 'slide-right-in'
-                        : pos.flipDirection === 'left'
-                          ? 'slide-left-in'
-                          : ''
-                      : pos.flipDirection === 'right'
-                        ? 'slide-right-out'
-                        : pos.flipDirection === 'left'
-                          ? 'slide-left-out'
-                          : ''
-                  }`}
-                  
+                    className={`absolute inset-0 transition-all duration-300 ${
+                      pos.activeLayer === layerIndex
+                        ? isMobile
+                          ? pos.flipDirection === 'right'
+                            ? 'slide-left-in'
+                            : pos.flipDirection === 'left'
+                              ? 'slide-right-in'
+                              : ''
+                          : pos.flipDirection === 'right'
+                            ? 'slide-right-in'
+                            : pos.flipDirection === 'left'
+                              ? 'slide-left-in'
+                              : ''
+                        : isMobile
+                          ? pos.flipDirection === 'right'
+                            ? 'slide-left-out'
+                            : pos.flipDirection === 'left'
+                              ? 'slide-right-out'
+                              : ''
+                          : pos.flipDirection === 'right'
+                            ? 'slide-right-out'
+                            : pos.flipDirection === 'left'
+                              ? 'slide-left-out'
+                              : ''
+                    }`}
                   >
                     <video
                       ref={el => {
@@ -457,34 +467,44 @@ useEffect(() => {
                   </div>
                 ) : (
                   <div
-                  className={`absolute inset-0 transition-all duration-300 ${
-                    pos.activeLayer === layerIndex
-                      ? pos.flipDirection === 'right'
-                        ? 'slide-right-in'
-                        : pos.flipDirection === 'left'
-                          ? 'slide-left-in'
-                          : ''
-                      : pos.flipDirection === 'right'
-                        ? 'slide-right-out'
-                        : pos.flipDirection === 'left'
-                          ? 'slide-left-out'
-                          : ''
-                  }`}
-                  
+                    className={`absolute inset-0 transition-all duration-300 ${
+                      pos.activeLayer === layerIndex
+                        ? isMobile
+                          ? pos.flipDirection === 'right'
+                            ? 'slide-left-in'
+                            : pos.flipDirection === 'left'
+                              ? 'slide-right-in'
+                              : ''
+                          : pos.flipDirection === 'right'
+                            ? 'slide-right-in'
+                            : pos.flipDirection === 'left'
+                              ? 'slide-left-in'
+                              : ''
+                        : isMobile
+                          ? pos.flipDirection === 'right'
+                            ? 'slide-left-out'
+                            : pos.flipDirection === 'left'
+                              ? 'slide-right-out'
+                              : ''
+                          : pos.flipDirection === 'right'
+                            ? 'slide-right-out'
+                            : pos.flipDirection === 'left'
+                              ? 'slide-left-out'
+                              : ''
+                    }`}
                     style={{
                       backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
                       backgroundSize: `${cols * 100}% ${rows * 100}%`,
                       backgroundPosition: `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`,
                       backgroundRepeat: 'no-repeat',
                       border: '1px solid black',
-
                     }}
                   />
-
                 )}
                 <div className="noise-overlay" />
               </div>
             ))}
+
           </div>
         ))}
       </div>
