@@ -34,7 +34,7 @@ function App() {
   const cols = 8;
   const gapSize = 0;
   const cornerRadius = 0;
-  const numLayers = 4;
+  const numLayers = 3;
   const floatScale = 1;
   const floatHeight = 2;
   const floatDepth = 16;
