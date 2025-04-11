@@ -3,6 +3,7 @@ export type MediaItem = {
     type: 'image' | 'video';
     url: string;
     header?: string;
+    fallbackUrl?: string; // Added fallback image URL for videos
   };
   
   export type MediaSlot = {
@@ -10,22 +11,64 @@ export type MediaItem = {
     b: MediaItem;
   };
   
+  
   export const defaultMediaSlots: MediaSlot[] = [
     {
-      a: { type: 'video', url: '/videos/eye-gradient-compressed.mp4', header: 'What’s the ceiling on AI video models?' },
-      b: { type: 'video', url: '/videos/eye-compressed.mp4', header: 'What’s the ceiling on AI video models?' }
+      a: { 
+        type: 'video', 
+        url: '/videos/eye-gradient-compressed.mp4', 
+        header: 'What’s the ceiling on AI video models?',
+        fallbackUrl: '/images/eye-gradient_2.3.1.webp'
+      },
+      b: { 
+        type: 'video', 
+        url: '/videos/eye-compressed.mp4', 
+        header: 'What’s the ceiling on AI video models?',
+        fallbackUrl: '/images/eye1.3.1.webp'
+      }
     },
     {
-      a: { type: 'video', url: '/videos/eye-light-gradient-compressed.mp4', header: 'When the tech improves every week, what is timeless?' },
-      b: { type: 'video', url: '/videos/eye-light-compressed.mp4', header: 'When the tech improves every week, what is timeless?' }
+      a: { 
+        type: 'video', 
+        url: '/videos/eye-light-gradient-compressed.mp4', 
+        header: 'When the tech improves every week, what is timeless?',
+        fallbackUrl: '/images/eye-dark-gradient_2.1.1.webp'
+      },
+      b: { 
+        type: 'video', 
+        url: '/videos/eye-light-compressed.mp4', 
+        header: 'When the tech improves every week, what is timeless?',
+        fallbackUrl: '/images/eye-dark_1.1.1.webp'
+      }
     },
     {
-      a: { type: 'video', url: '/videos/eye-pit-gradient-compressed.mp4', header: 'Can you direct a dataset?' },
-      b: { type: 'video', url: '/videos/eye-pit-compressed.mp4', header: 'Can you direct a dataset?' }
+      a: { 
+        type: 'video', 
+        url: '/videos/eye-pit-gradient-compressed.mp4', 
+        header: 'Can you direct a dataset?',
+        fallbackUrl: '/images/eye-pit-gradient_2.4.1.webp'
+      },
+      b: { 
+        type: 'video', 
+        url: '/videos/eye-pit-compressed.mp4', 
+        header: 'Can you direct a dataset?',
+        fallbackUrl: '/images/eye-pit_1.4.1.webp'
+      }
     },
     {
-      a: { type: 'video', url: '/videos/eye-lens-gradient-compressed.mp4', header: 'What jobs will AI create in the media industry?' },
-      b: { type: 'video', url: '/videos/eye-lens-compressed.mp4', header: 'What jobs will AI create in the media industry?' }
+      a: { 
+        type: 'video', 
+        url: '/videos/eye-lens-gradient-compressed.mp4', 
+        header: 'What jobs will AI create in the media industry?',
+        fallbackUrl: '/images/eye-lens-gradient_2.2.1.webp'
+      },
+      b: { 
+        type: 'video', 
+        url: '/videos/eye-lens-compressed.mp4', 
+        header: 'What jobs will AI create in the media industry?',
+        fallbackUrl: '/images/eye-cloud_1.2.1.webp'
+      }
     }
   ];
+  
   

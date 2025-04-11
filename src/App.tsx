@@ -284,24 +284,26 @@ useEffect(() => {
               }`}
           >
 
-            {mediaSlots[layerIndex]?.a.type === 'video' ? (
-              <video
-                ref={el => fullscreenVideoRefs.current[layerIndex] = el}
-                className="absolute w-full h-full object-cover"
-                src={mediaSlots[layerIndex]?.a.url}
-                muted
-                playsInline
-                loop
-                autoPlay
-              />
-            ) : (
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{
-                  backgroundImage: `url("${mediaSlots[layerIndex]?.a.url}")`,
-                }}
-              />
-            )}
+          {mediaSlots[layerIndex]?.a.type === 'video' ? (
+            <video
+              ref={el => fullscreenVideoRefs.current[layerIndex] = el}
+              className="absolute w-full h-full object-cover"
+              src={mediaSlots[layerIndex]?.a.url}
+              poster={mediaSlots[layerIndex]?.a.fallbackUrl || ''}
+              muted
+              playsInline
+              loop
+              autoPlay
+            />
+          ) : (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `url("${mediaSlots[layerIndex]?.a.url}")`,
+              }}
+            />
+          )}
+
           </div>
         ))}
       </div>
@@ -441,6 +443,7 @@ useEffect(() => {
                       } as React.CSSProperties}
                       className="absolute w-full h-full object-cover video-tile"
                       src={mediaSlots[layerIndex]?.b.url}
+                      poster={mediaSlots[layerIndex]?.b.fallbackUrl || ''}
                       muted
                       playsInline
                       loop
