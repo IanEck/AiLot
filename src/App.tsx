@@ -34,7 +34,7 @@ function App() {
   const cols = 1;
   const gapSize = 0;
   const cornerRadius = 0;
-  const numLayers = 3;
+  const numLayers = 4;
   const floatScale = 1;
   const floatHeight = 2;
   const floatDepth = 16;
@@ -311,7 +311,7 @@ useEffect(() => {
         ))}
       </div>
 
-      <div className="relative md:w-1/2 w-full md:h-full h-1/2 md:border-none border-t-[0.5rem] border-black">
+      <div className="relative md:w-1/2 w-full md:h-full h-1/2 md:border-none border-t-[0.25rem] border-black">
         <button
           onClick={() => setShowControls(!showControls)}
           className="fixed top-4 right-4 z-[1000] p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
