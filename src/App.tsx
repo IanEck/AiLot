@@ -227,9 +227,7 @@ useEffect(() => {
 }, [isFlipping]);
 
   return (
-    <div className="relative w-screen h-screen bg-gray-900 overflow-hidden flex flex-col-reverse md:flex-row border-[0.5rem] border-black"
-    style={{ height: 'calc(100vh - 98px)' }}
-    >
+    <div className="relative w-screen h-screen bg-gray-900 overflow-hidden flex flex-col-reverse md:flex-row border-[0.5rem] border-black">
       <div className="md:w-1/2 w-full md:h-full h-1/2 bg-gray-900 relative overflow-hidden md:border-r-[0.5rem] md:border-black">
         <div className="absolute inset-0 z-10 flex flex-col items-start justify-center p-6">
           <h2 className="text-white text-4xl font-bold drop-shadow-lg mb-4 font-space-grotesk">
