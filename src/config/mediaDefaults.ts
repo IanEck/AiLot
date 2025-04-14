@@ -20,7 +20,7 @@ export type MediaItem = {
         type: 'video', 
         url: '/videos/eye-gradient-compressed.mp4', 
         mobileUrl: '/videos/eye-gradient-compressed-mobile.mp4',
-        header: 'What’s the ceiling on AI video models?',
+        header: 'What’s the ceiling on AI video models',
         fallbackUrl: '/images/eye-gradient_2.3.1.webp'
       },
       b: { 
