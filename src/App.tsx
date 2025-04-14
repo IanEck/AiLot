@@ -32,7 +32,6 @@ function App() {
   // Locked settings
   const rows = 1;
   const cols = 8;
-  const gapSize = 0;
   const cornerRadius = 0;
   const numLayers = 4;
   const floatScale = 1;
@@ -48,7 +47,7 @@ function App() {
     }))
   );
   
-  const fileInputRefs = Array(8).fill(0).map(() => useRef<HTMLInputElement>(null));
+  const fileInputRefs = useRef<(HTMLInputElement | null)[]>(Array(8).fill(null));
   const videoRefs = useRef<(HTMLVideoElement | null)[][]>(
     Array(numLayers).fill(null).map(() => Array(rows * cols).fill(null))
   );
@@ -345,13 +344,13 @@ useEffect(() => {
                   <div>
                     <input
                       type="file"
-                      ref={fileInputRefs[index * 2]}
+                      ref={el => fileInputRefs.current[index * 2] = el}
                       onChange={(e) => handleMediaUpload(e, index, 'a')}
                       accept="image/*,video/mp4"
                       className="hidden"
                     />
                     <button
-                      onClick={() => fileInputRefs[index * 2].current?.click()}
+                      onClick={() => fileInputRefs.current[index * 2]?.click()}
                       className="w-full p-3 flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white transition-colors"
                     >
                       <Upload className="w-4 h-4" />
@@ -373,13 +372,13 @@ useEffect(() => {
                   <div>
                     <input
                       type="file"
-                      ref={fileInputRefs[index * 2 + 1]}
+                      ref={el => fileInputRefs.current[index * 2 + 1] = el}
                       onChange={(e) => handleMediaUpload(e, index, 'b')}
                       accept="image/*,video/mp4"
                       className="hidden"
                     />
                     <button
-                      onClick={() => fileInputRefs[index * 2 + 1].current?.click()}
+                      onClick={() => fileInputRefs.current[index * 2 + 1]?.click()}
                       className="w-full p-3 flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white transition-colors"
                     >
                       <Upload className="w-4 h-4" />
@@ -392,121 +391,115 @@ useEffect(() => {
           </div>
         </div>
 
-        {Array(numLayers).fill(0).map((_, layerIndex) => (
-          <div
-            key={layerIndex}
-            className="absolute inset-0 grid"
-            style={{
-              gridTemplateColumns: `repeat(${cols}, 1fr)`,
-              gridTemplateRows: `repeat(${rows}, 1fr)`,
-              gap: `${gapSize}px`,
-              zIndex: layerIndex + 10,
-              padding: 0
-            }}
-          >
-            {positions.map((pos, i) => (
-              <div
-                key={`mask${layerIndex}-${i}`}
-                ref={el => cellRefs.current[i] = el}
-                className={`relative overflow-hidden [perspective:1000px] ${numLayers === 1 || pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'}`}
-                style={{
-                  borderRadius: `${cornerRadius}px`,
-                  transitionDelay: `${pos.transitionDelay}ms`
-                }}
-              >
-                {mediaSlots[layerIndex]?.b.type === 'video' ? (
-                  <div
-                    className={`absolute inset-0 transition-all duration-300 ${
-                      pos.activeLayer === layerIndex
-                        ? isMobile
-                          ? pos.flipDirection === 'right'
-                            ? 'slide-left-in'
-                            : pos.flipDirection === 'left'
-                              ? 'slide-right-in'
-                              : ''
-                          : pos.flipDirection === 'right'
-                            ? 'slide-right-in'
-                            : pos.flipDirection === 'left'
+        <div className="grid-container">
+          {Array(numLayers).fill(0).map((_, layerIndex) => (
+            <div
+              key={layerIndex}
+              className={`grid-layer ${positions[0]?.activeLayer === layerIndex ? 'active' : 'inactive'}`}
+            >
+              {positions.map((pos, i) => (
+                <div
+                  key={`mask${layerIndex}-${i}`}
+                  ref={el => cellRefs.current[i] = el}
+                  className={`grid-cell ${pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'}`}
+                  style={{
+                    borderRadius: `${cornerRadius}px`,
+                    transitionDelay: `${pos.transitionDelay}ms`,
+                    gridColumn: `${(i % cols) + 1} / span 1`,
+                    gridRow: `${Math.floor(i / cols) + 1} / span 1`
+                  }}
+                >
+                  {mediaSlots[layerIndex]?.b.type === 'video' ? (
+                    <div
+                      className={`video-container ${
+                        pos.activeLayer === layerIndex
+                          ? isMobile
+                            ? pos.flipDirection === 'right'
                               ? 'slide-left-in'
-                              : ''
-                        : isMobile
-                          ? pos.flipDirection === 'right'
-                            ? 'slide-left-out'
-                            : pos.flipDirection === 'left'
-                              ? 'slide-right-out'
-                              : ''
-                          : pos.flipDirection === 'right'
-                            ? 'slide-right-out'
-                            : pos.flipDirection === 'left'
+                              : pos.flipDirection === 'left'
+                                ? 'slide-right-in'
+                                : ''
+                            : pos.flipDirection === 'right'
+                              ? 'slide-right-in'
+                              : pos.flipDirection === 'left'
+                                ? 'slide-left-in'
+                                : ''
+                          : isMobile
+                            ? pos.flipDirection === 'right'
                               ? 'slide-left-out'
-                              : ''
-                    }`}
-                  >
-                    <video
-                      ref={el => {
-                        if (videoRefs.current[layerIndex]) {
-                          videoRefs.current[layerIndex][i] = el;
-                        }
-                      }}
-                      onTimeUpdate={(e) => handleVideoTimeUpdate(e, layerIndex, i)}
+                              : pos.flipDirection === 'left'
+                                ? 'slide-right-out'
+                                : ''
+                            : pos.flipDirection === 'right'
+                              ? 'slide-right-out'
+                              : pos.flipDirection === 'left'
+                                ? 'slide-left-out'
+                                : ''
+                      }`}
+                    >
+                      <video
+                        ref={el => {
+                          if (videoRefs.current[layerIndex]) {
+                            videoRefs.current[layerIndex][i] = el;
+                          }
+                        }}
+                        onTimeUpdate={(e) => handleVideoTimeUpdate(e, layerIndex, i)}
+                        style={{
+                          '--video-pos': pos.backgroundPosition
+                            ? `${pos.backgroundPosition.x}% ${pos.backgroundPosition.y}%`
+                            : `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`
+                        } as React.CSSProperties}
+                        className="video-tile"
+                        src={isMobile && mediaSlots[layerIndex]?.b.mobileUrl ? mediaSlots[layerIndex].b.mobileUrl : mediaSlots[layerIndex].b.url}
+                        poster={mediaSlots[layerIndex]?.b.fallbackUrl || ''}
+                        muted
+                        playsInline
+                        loop
+                        autoPlay
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className={`image-container ${
+                        pos.activeLayer === layerIndex
+                          ? isMobile
+                            ? pos.flipDirection === 'right'
+                              ? 'slide-left-in'
+                              : pos.flipDirection === 'left'
+                                ? 'slide-right-in'
+                                : ''
+                            : pos.flipDirection === 'right'
+                              ? 'slide-right-in'
+                              : pos.flipDirection === 'left'
+                                ? 'slide-left-in'
+                                : ''
+                          : isMobile
+                            ? pos.flipDirection === 'right'
+                              ? 'slide-left-out'
+                              : pos.flipDirection === 'left'
+                                ? 'slide-right-out'
+                                : ''
+                            : pos.flipDirection === 'right'
+                              ? 'slide-right-out'
+                              : pos.flipDirection === 'left'
+                                ? 'slide-left-out'
+                                : ''
+                      }`}
                       style={{
-                        width: `${cols * 100}%`,
-                        height: `${rows * 100}%`,
-                        ['--video-pos']: pos.backgroundPosition
-                          ? `${pos.backgroundPosition.x}% ${pos.backgroundPosition.y}%`
-                          : `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`
-                      } as React.CSSProperties}
-                      className="absolute w-full h-full object-cover video-tile"
-                      src={isMobile && mediaSlots[layerIndex]?.b.mobileUrl ? mediaSlots[layerIndex].b.mobileUrl : mediaSlots[layerIndex].b.url}
-                      poster={mediaSlots[layerIndex]?.b.fallbackUrl || ''}
-                      muted
-                      playsInline
-                      loop
-                      autoPlay
+                        backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
+                        backgroundSize: `${cols * 100}% ${rows * 100}%`,
+                        backgroundPosition: `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`,
+                        backgroundRepeat: 'no-repeat',
+                        border: '1px solid black',
+                      }}
                     />
-                  </div>
-                ) : (
-                  <div
-                    className={`absolute inset-0 transition-all duration-300 ${
-                      pos.activeLayer === layerIndex
-                        ? isMobile
-                          ? pos.flipDirection === 'right'
-                            ? 'slide-left-in'
-                            : pos.flipDirection === 'left'
-                              ? 'slide-right-in'
-                              : ''
-                          : pos.flipDirection === 'right'
-                            ? 'slide-right-in'
-                            : pos.flipDirection === 'left'
-                              ? 'slide-left-in'
-                              : ''
-                        : isMobile
-                          ? pos.flipDirection === 'right'
-                            ? 'slide-left-out'
-                            : pos.flipDirection === 'left'
-                              ? 'slide-right-out'
-                              : ''
-                          : pos.flipDirection === 'right'
-                            ? 'slide-right-out'
-                            : pos.flipDirection === 'left'
-                              ? 'slide-left-out'
-                              : ''
-                    }`}
-                    style={{
-                      backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
-                      backgroundSize: `${cols * 100}% ${rows * 100}%`,
-                      backgroundPosition: `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`,
-                      backgroundRepeat: 'no-repeat',
-                      border: '1px solid black',
-                    }}
-                  />
-                )}
-                <div className="noise-overlay" />
-              </div>
-            ))}
-
-          </div>
-        ))}
+                  )}
+                  <div className="noise-overlay" />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
