@@ -31,7 +31,7 @@ function App() {
 
   // Locked settings
   const rows = 1;
-  const cols = 1;
+  const cols = 8;
   const gapSize = 0;
   const cornerRadius = 0;
   const numLayers = 4;
