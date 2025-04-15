@@ -292,6 +292,7 @@ useEffect(() => {
               // If mobile and a mobileUrl exists, use it; otherwise fall back to the desktop URL.
               src={isMobile && mediaSlots[layerIndex]?.a.mobileUrl ? mediaSlots[layerIndex].a.mobileUrl : mediaSlots[layerIndex].a.url}
               poster={mediaSlots[layerIndex]?.a.fallbackUrl || ''}
+              preload="metadata"
               muted
               playsInline
               loop
