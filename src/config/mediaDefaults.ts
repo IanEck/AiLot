@@ -18,22 +18,6 @@ export type MediaItem = {
     {
       a: { 
         type: 'video', 
-        url: '/videos/eye-gradient-compressed.mp4', 
-        mobileUrl: '/videos/eye-gradient-compressed-mobile.mp4',
-        header: 'What’s the ceiling on AI video models?',
-        fallbackUrl: '/images/eye-gradient_2.3.1.webp'
-      },
-      b: { 
-        type: 'video', 
-        url: '/videos/eye-compressed.mp4', 
-        mobileUrl: '/videos/eye-compressed-mobile.mp4',
-        header: 'What’s the ceiling on AI video models?',
-        fallbackUrl: '/images/eye1.3.1.webp'
-      }
-    },
-    {
-      a: { 
-        type: 'video', 
         url: '/videos/eye-light-gradient-compressed.mp4', 
         mobileUrl: '/videos/eye-light-gradient-compressed-mobile.mp4',
         header: 'When the tech improves every week, what is timeless?',
@@ -50,17 +34,17 @@ export type MediaItem = {
     {
       a: { 
         type: 'video', 
-        url: '/videos/eye-pit-gradient-compressed.mp4', 
-        mobileUrl: '/videos/eye-pit-gradient-compressed-mobile.mp4',
-        header: 'Can you direct a dataset?',
-        fallbackUrl: '/images/eye-pit-gradient_2.4.1.webp'
+        url: '/videos/eye-gradient-compressed.mp4', 
+        mobileUrl: '/videos/eye-gradient-compressed-mobile.mp4',
+        header: 'What’s the ceiling on AI video models?',
+        fallbackUrl: '/images/eye-gradient_2.3.1.webp'
       },
       b: { 
         type: 'video', 
-        url: '/videos/eye-pit-compressed.mp4', 
-        mobileUrl: '/videos/eye-pit-compressed-mobile.mp4',
-        header: 'Can you direct a dataset?',
-        fallbackUrl: '/images/eye-pit_1.4.1.webp'
+        url: '/videos/eye-compressed.mp4', 
+        mobileUrl: '/videos/eye-compressed-mobile.mp4',
+        header: 'What’s the ceiling on AI video models?',
+        fallbackUrl: '/images/eye1.3.1.webp'
       }
     },
     {
@@ -77,6 +61,22 @@ export type MediaItem = {
         mobileUrl: '/videos/eye-lens-compressed-mobile.mp4',
         header: 'What jobs will AI create in the media industry?',
         fallbackUrl: '/images/eye-cloud_1.2.1.webp'
+      }
+    },
+    {
+      a: { 
+        type: 'video', 
+        url: '/videos/eye-pit-gradient-compressed.mp4', 
+        mobileUrl: '/videos/eye-pit-gradient-compressed-mobile.mp4',
+        header: 'Can you direct a dataset?',
+        fallbackUrl: '/images/eye-pit-gradient_2.4.1.webp'
+      },
+      b: { 
+        type: 'video', 
+        url: '/videos/eye-pit-compressed.mp4', 
+        mobileUrl: '/videos/eye-pit-compressed-mobile.mp4',
+        header: 'Can you direct a dataset?',
+        fallbackUrl: '/images/eye-pit_1.4.1.webp'
       }
     }
   ];
