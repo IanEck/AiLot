@@ -90,10 +90,10 @@
 
 @keyframes slideRight {
   0% {
-    transform: translateX(0);
+    transform: translateX(-100%);
   }
   100% {
-    transform: translateX(100%);
+    transform: translateX(0);
   }
 }
 
@@ -102,7 +102,7 @@
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(100%);
   }
 }
 
@@ -167,7 +167,7 @@
   }
 
   .slide-right-out {
-    animation: slideRight 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideLeft 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   .slide-left-out {
@@ -175,11 +175,11 @@
   }
 
   .slide-right-in {
-    animation: slideRightIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideRight 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   .slide-left-in {
-    animation: slideLeftIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideRight 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 }
 

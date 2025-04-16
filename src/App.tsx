@@ -140,22 +140,19 @@ function App() {
     if (isFlipping) return;
     setIsFlipping(true);
 
-    const newFlipDirection = direction === 'left' ? 'right' : 'left';
     const leftPanelDuration = 600;
 
     setTimeout(() => {
       setPositions(currentPositions => {
         const updatedPositions = [...currentPositions];
         const currentLayer = updatedPositions[0].activeLayer;
-        const nextLayer = direction === 'left'
-          ? (currentLayer + 1) % numLayers
-          : (currentLayer - 1 + numLayers) % numLayers;
+        const nextLayer = (currentLayer + 1) % numLayers;
 
         updatedPositions[0] = {
           activeLayer: nextLayer,
           transitionDelay: 0,
           backgroundPosition: getOriginalPosition(0),
-          flipDirection: newFlipDirection,
+          flipDirection: 'right',
         };
 
         return updatedPositions;
@@ -257,16 +254,8 @@ useEffect(() => {
           <div
             key={`fullscreen-${layerIndex}`}
             className={`absolute inset-0 ${positions[0]?.activeLayer === layerIndex
-              ? positions[0]?.flipDirection === 'right'
-                ? 'slide-right-in'
-                : positions[0]?.flipDirection === 'left'
-                  ? 'slide-left-in'
-                  : ''
-              : positions[0]?.flipDirection === 'right'
-                ? 'slide-left-out'
-                : positions[0]?.flipDirection === 'left'
-                  ? 'slide-right-out'
-                  : 'opacity-0'
+              ? 'slide-right-in'
+              : 'slide-left-out'
               }`}
           >
 
@@ -402,8 +391,8 @@ useEffect(() => {
                   key={`mask${layerIndex}-${i}`}
                   ref={el => cellRefs.current[i] = el}
                   className={`grid-cell ${pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'} ${
-                    pos.flipDirection === 'right' ? 'flip-right-in' : 
-                    pos.flipDirection === 'left' ? 'flip-left-in' : ''
+                    pos.flipDirection === 'right' ? 'slide-right-out' : 
+                    pos.flipDirection === 'left' ? 'slide-left-out' : ''
                   }`}
                   style={{
                     borderRadius: `${cornerRadius}px`,
