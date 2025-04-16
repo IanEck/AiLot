@@ -140,7 +140,6 @@ function App() {
     if (isFlipping) return;
     setIsFlipping(true);
 
-    const newFlipDirection = direction === 'left' ? 'right' : 'left';
     const leftPanelDuration = 600;
 
     setTimeout(() => {
@@ -151,12 +150,15 @@ function App() {
           ? (currentLayer + 1) % numLayers
           : (currentLayer - 1 + numLayers) % numLayers;
 
-        updatedPositions[0] = {
-          activeLayer: nextLayer,
-          transitionDelay: 0,
-          backgroundPosition: getOriginalPosition(0),
-          flipDirection: newFlipDirection,
-        };
+        // Update all positions to the same next layer
+        updatedPositions.forEach((_, index) => {
+          updatedPositions[index] = {
+            activeLayer: nextLayer,
+            transitionDelay: 0,
+            backgroundPosition: getOriginalPosition(index),
+            flipDirection: direction,
+          };
+        });
 
         return updatedPositions;
       });
