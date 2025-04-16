@@ -27,7 +27,8 @@ function App() {
   const [showControls, setShowControls] = useState(false);
   const [isFlipping, setIsFlipping] = useState(false);
   const [mediaSlots, setMediaSlots] = useState(defaultMediaSlots);
-
+  const [loadingStates, setLoadingStates] = useState<{ [key: string]: boolean }>({});
+  const [preloadedVideos, setPreloadedVideos] = useState<{ [key: string]: HTMLVideoElement }>({});
 
   // Locked settings
   const rows = 1;
@@ -206,6 +207,37 @@ function App() {
     }, leftPanelDuration);
   };
 
+  // Preload next video
+  useEffect(() => {
+    const preloadVideo = async (url: string) => {
+      if (!preloadedVideos[url]) {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        video.src = url;
+        video.muted = true;
+        
+        await new Promise((resolve) => {
+          video.onloadedmetadata = resolve;
+        });
+        
+        setPreloadedVideos(prev => ({ ...prev, [url]: video }));
+      }
+    };
+
+    // Preload next video in sequence
+    const currentIndex = positions[0]?.activeLayer || 0;
+    const nextIndex = (currentIndex + 1) % mediaSlots.length;
+    const nextVideoUrl = isMobile ? mediaSlots[nextIndex]?.a.mobileUrl : mediaSlots[nextIndex]?.a.url;
+    
+    if (nextVideoUrl) {
+      preloadVideo(nextVideoUrl);
+    }
+  }, [positions, mediaSlots, isMobile]);
+
+  // Update video loading states
+  const handleVideoLoading = (url: string, isLoading: boolean) => {
+    setLoadingStates(prev => ({ ...prev, [url]: isLoading }));
+  };
 
   useEffect(() => {
     document.documentElement.style.setProperty('--float-scale', floatScale.toString());
@@ -286,30 +318,41 @@ useEffect(() => {
           >
 
           {mediaSlots[layerIndex]?.a.type === 'video' ? (
-            <video
-              ref={el => {
-                fullscreenVideoRefs.current[layerIndex] = el;
-                if (el) {
-                  el.addEventListener('error', (e) => {
-                    console.error('Video error:', e);
-                    console.error('Video source:', el.src);
-                  });
-                  el.addEventListener('loadeddata', () => {
-                    console.log('Video loaded:', el.src);
-                  });
-                }
-              }}
-              className="absolute w-full h-full object-cover"
-              src={isMobile && mediaSlots[layerIndex]?.a.mobileUrl ? mediaSlots[layerIndex].a.mobileUrl : mediaSlots[layerIndex].a.url}
-              poster={mediaSlots[layerIndex]?.a.fallbackUrl || ''}
-              preload="metadata"
-              muted
-              playsInline
-              loop
-              autoPlay
-              onError={(e) => console.error('Video error:', e)}
-              onLoadedData={() => console.log('Video loaded successfully')}
-            />
+            <div className="relative w-full h-full">
+              {loadingStates[mediaSlots[layerIndex]?.a.url] && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
+                  <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                </div>
+              )}
+              <video
+                ref={el => {
+                  fullscreenVideoRefs.current[layerIndex] = el;
+                  if (el) {
+                    el.addEventListener('error', (e) => {
+                      console.error('Video error:', e);
+                      console.error('Video source:', el.src);
+                    });
+                    el.addEventListener('loadeddata', () => {
+                      console.log('Video loaded:', el.src);
+                      handleVideoLoading(el.src, false);
+                    });
+                    el.addEventListener('waiting', () => {
+                      handleVideoLoading(el.src, true);
+                    });
+                  }
+                }}
+                className="absolute w-full h-full object-cover"
+                src={isMobile && mediaSlots[layerIndex]?.a.mobileUrl ? mediaSlots[layerIndex].a.mobileUrl : mediaSlots[layerIndex].a.url}
+                poster={mediaSlots[layerIndex]?.a.fallbackUrl || ''}
+                preload="metadata"
+                muted
+                playsInline
+                loop
+                autoPlay
+                onError={(e) => console.error('Video error:', e)}
+                onLoadedData={() => console.log('Video loaded successfully')}
+              />
+            </div>
           ) : (
             <div
               className="absolute inset-0 bg-cover bg-center"
