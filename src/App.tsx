@@ -257,8 +257,8 @@ useEffect(() => {
           <div
             key={`fullscreen-${layerIndex}`}
             className={`absolute inset-0 ${positions[0]?.activeLayer === layerIndex
-              ? 'slide-right-in'
-              : 'slide-left-out'
+              ? 'slide-left-in'
+              : 'slide-right-out'
               }`}
           >
 
@@ -394,7 +394,7 @@ useEffect(() => {
                   key={`mask${layerIndex}-${i}`}
                   ref={el => cellRefs.current[i] = el}
                   className={`grid-cell ${pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'} ${
-                    pos.activeLayer === layerIndex ? 'slide-right-in' : 'slide-left-out'
+                    pos.activeLayer === layerIndex ? 'slide-left-in' : 'slide-right-out'
                   }`}
                   style={{
                     borderRadius: `${cornerRadius}px`,
