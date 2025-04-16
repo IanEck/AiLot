@@ -239,7 +239,7 @@ useEffect(() => {
   className="rounded-none border border-black"
   onClick={() => window.open("https://airtable.com/appRpU91ro4CMTHVd/paghic61rXUeGaece/form", "_blank")}
 >
-  JOIN WAITLIST
+  REGISTER NOW
 </button>
 
             <button
