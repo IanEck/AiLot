@@ -234,7 +234,7 @@ useEffect(() => {
     textAlign: 'center',
   }}
   className="rounded-none border border-black"
-  onClick={() => window.open("https://airtable.com/appRpU91ro4CMTHVd/paghic61rXUeGaece/form", "_blank")}
+  onClick={() => window.open("https://lu.ma/aionthelot", "_blank")}
 >
   BUY TICKETS
 </button>
