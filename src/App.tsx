@@ -147,8 +147,8 @@ function App() {
         const updatedPositions = [...currentPositions];
         const currentLayer = updatedPositions[0].activeLayer;
         const nextLayer = direction === 'left'
-          ? (currentLayer + 1) % numLayers
-          : (currentLayer - 1 + numLayers) % numLayers;
+          ? (currentLayer + 1) % mediaSlots.length
+          : (currentLayer - 1 + mediaSlots.length) % mediaSlots.length;
 
         // Update all positions to the same next layer
         updatedPositions.forEach((_, index) => {
