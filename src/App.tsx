@@ -257,16 +257,8 @@ useEffect(() => {
           <div
             key={`fullscreen-${layerIndex}`}
             className={`absolute inset-0 ${positions[0]?.activeLayer === layerIndex
-              ? positions[0]?.flipDirection === 'right'
-                ? 'slide-right-in'
-                : positions[0]?.flipDirection === 'left'
-                  ? 'slide-left-in'
-                  : ''
-              : positions[0]?.flipDirection === 'right'
-                ? 'slide-left-out'
-                : positions[0]?.flipDirection === 'left'
-                  ? 'slide-right-out'
-                  : 'opacity-0'
+              ? 'slide-right-in'
+              : 'slide-left-out'
               }`}
           >
 
@@ -402,8 +394,7 @@ useEffect(() => {
                   key={`mask${layerIndex}-${i}`}
                   ref={el => cellRefs.current[i] = el}
                   className={`grid-cell ${pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'} ${
-                    pos.flipDirection === 'right' ? 'slide-left-in' : 
-                    pos.flipDirection === 'left' ? 'slide-right-in' : ''
+                    pos.activeLayer === layerIndex ? 'slide-right-in' : 'slide-left-out'
                   }`}
                   style={{
                     borderRadius: `${cornerRadius}px`,
