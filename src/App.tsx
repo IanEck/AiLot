@@ -402,8 +402,8 @@ useEffect(() => {
                   key={`mask${layerIndex}-${i}`}
                   ref={el => cellRefs.current[i] = el}
                   className={`grid-cell ${pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'} ${
-                    pos.flipDirection === 'right' ? 'slide-right-in' : 
-                    pos.flipDirection === 'left' ? 'slide-left-in' : ''
+                    pos.flipDirection === 'right' ? 'slide-left-in' : 
+                    pos.flipDirection === 'left' ? 'slide-right-in' : ''
                   }`}
                   style={{
                     borderRadius: `${cornerRadius}px`,
