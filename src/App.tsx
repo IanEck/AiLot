@@ -287,9 +287,19 @@ useEffect(() => {
 
           {mediaSlots[layerIndex]?.a.type === 'video' ? (
             <video
-              ref={el => fullscreenVideoRefs.current[layerIndex] = el}
+              ref={el => {
+                fullscreenVideoRefs.current[layerIndex] = el;
+                if (el) {
+                  el.addEventListener('error', (e) => {
+                    console.error('Video error:', e);
+                    console.error('Video source:', el.src);
+                  });
+                  el.addEventListener('loadeddata', () => {
+                    console.log('Video loaded:', el.src);
+                  });
+                }
+              }}
               className="absolute w-full h-full object-cover"
-              // If mobile and a mobileUrl exists, use it; otherwise fall back to the desktop URL.
               src={isMobile && mediaSlots[layerIndex]?.a.mobileUrl ? mediaSlots[layerIndex].a.mobileUrl : mediaSlots[layerIndex].a.url}
               poster={mediaSlots[layerIndex]?.a.fallbackUrl || ''}
               preload="metadata"
@@ -297,6 +307,8 @@ useEffect(() => {
               playsInline
               loop
               autoPlay
+              onError={(e) => console.error('Video error:', e)}
+              onLoadedData={() => console.log('Video loaded successfully')}
             />
           ) : (
             <div
