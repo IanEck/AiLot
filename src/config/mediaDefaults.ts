@@ -1,7 +1,7 @@
 // src/config/mediaDefaults.ts
 
 // Add this at the top of the file
-const CDN_URL = 'https://dxxxxx.cloudfront.net'; // You'll get this URL from CloudFront
+const CDN_URL = 'https://[your-actual-cloudfront-distribution-id].cloudfront.net'; // You'll get this URL from CloudFront
 
 export type MediaItem = {
     type: 'image' | 'video';
@@ -40,14 +40,14 @@ export type MediaItem = {
         type: 'video', 
         url: `${CDN_URL}/videos/eye-gradient-compressed.mp4`,
         mobileUrl: `${CDN_URL}/videos/eye-gradient-compressed-mobile.mp4`,
-        header: 'What's the ceiling on AI video models?',
+        header: 'What\'s the ceiling on AI video models?',
         fallbackUrl: `${CDN_URL}/images/eye-gradient_2.3.1.webp`
       },
       b: { 
         type: 'video', 
         url: '/videos/eye-compressed.mp4', 
         mobileUrl: '/videos/eye-compressed-mobile.mp4',
-        header: 'What's the ceiling on AI video models?',
+        header: 'What\'s the ceiling on AI video models?',
         fallbackUrl: '/images/eye1.3.1.webp'
       }
     },
