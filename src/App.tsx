@@ -146,9 +146,7 @@ function App() {
       setPositions(currentPositions => {
         const updatedPositions = [...currentPositions];
         const currentLayer = updatedPositions[0].activeLayer;
-        const nextLayer = direction === 'left'
-          ? (currentLayer + 1) % mediaSlots.length
-          : (currentLayer - 1 + mediaSlots.length) % mediaSlots.length;
+        const nextLayer = (currentLayer + 1) % mediaSlots.length;
 
         // Update all positions to the same next layer
         updatedPositions.forEach((_, index) => {
@@ -156,7 +154,7 @@ function App() {
             activeLayer: nextLayer,
             transitionDelay: 0,
             backgroundPosition: getOriginalPosition(index),
-            flipDirection: direction,
+            flipDirection: 'right',
           };
         });
 
