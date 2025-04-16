@@ -421,7 +421,7 @@ useEffect(() => {
                 style={{
                   borderRadius: `${cornerRadius}px`,
                   transitionDelay: `${positions[0]?.transitionDelay}ms`,
-                  gridColumn: `1 / span ${cols}`,
+                  gridColumn: '1 / -1',
                   gridRow: '1 / span 1'
                 }}
               >
