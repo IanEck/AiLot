@@ -141,69 +141,28 @@ function App() {
     if (isFlipping) return;
     setIsFlipping(true);
 
-    // 1. Trigger a temporary state for left panel animation
     const newFlipDirection = direction === 'left' ? 'right' : 'left';
-
-
-
-    // Wait for left panel animation to complete before tile flips
     const leftPanelDuration = 600;
 
     setTimeout(() => {
-      const cellsByCol: number[][] = Array(cols).fill(0).map(() => []);
+      setPositions(currentPositions => {
+        const updatedPositions = [...currentPositions];
+        const currentLayer = updatedPositions[0].activeLayer;
+        const nextLayer = direction === 'left'
+          ? (currentLayer + 1) % numLayers
+          : (currentLayer - 1 + numLayers) % numLayers;
 
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const index = r * cols + c;
-          cellsByCol[c].push(index);
-        }
-      }
+        updatedPositions[0] = {
+          activeLayer: nextLayer,
+          transitionDelay: 0,
+          backgroundPosition: getOriginalPosition(),
+          flipDirection: newFlipDirection,
+        };
 
-      let sequence: number[] = [];
-
-      if (startPoint === 'right') {
-        for (let c = 0; c < cols; c++) {
-          sequence = [...sequence, ...cellsByCol[c]];
-        }
-      } else {
-        for (let c = cols - 1; c >= 0; c--) {
-          sequence = [...sequence, ...cellsByCol[c]];
-        }
-      }
-
-      const totalTiles = sequence.length;
-      const totalDuration = 500;
-      const delayBetweenTiles = totalTiles <= 1 ? 0 : totalDuration / (totalTiles - 1);
-
-      const flipTile = (index: number, delay: number) => {
-        setTimeout(() => {
-          setPositions(currentPositions => {
-            const updatedPositions = [...currentPositions];
-            const currentLayer = updatedPositions[index].activeLayer;
-            const nextLayer = direction === 'left'
-              ? (currentLayer + 1) % numLayers
-              : (currentLayer - 1 + numLayers) % numLayers;
-
-            updatedPositions[index] = {
-              activeLayer: nextLayer,
-              transitionDelay: 0,
-              backgroundPosition: getOriginalPosition(),
-              flipDirection: newFlipDirection,
-            };
-
-            return updatedPositions;
-          });
-
-          if (index === sequence[sequence.length - 1]) {
-            setTimeout(() => setIsFlipping(false), 600);
-          }
-        }, delay);
-      };
-
-      sequence.forEach((index, position) => {
-        flipTile(index, position * delayBetweenTiles);
+        return updatedPositions;
       });
 
+      setTimeout(() => setIsFlipping(false), 600);
     }, leftPanelDuration);
   };
 
@@ -455,7 +414,10 @@ useEffect(() => {
             >
               <div
                 ref={el => cellRefs.current[0] = el}
-                className={`grid-cell ${positions[0]?.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'}`}
+                className={`grid-cell ${positions[0]?.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'} ${
+                  positions[0]?.flipDirection === 'right' ? 'flip-right-in' : 
+                  positions[0]?.flipDirection === 'left' ? 'flip-left-in' : ''
+                }`}
                 style={{
                   borderRadius: `${cornerRadius}px`,
                   transitionDelay: `${positions[0]?.transitionDelay}ms`,

@@ -68,23 +68,23 @@
 
 @keyframes flipRightIn {
   0% {
-    transform: perspective(var(--cube-perspective)) rotateY(calc(var(--cube-rotate) * -1));
-    filter: blur(var(--blur-amount));
+    transform: perspective(1000px) rotateY(-90deg);
+    opacity: 0;
   }
   100% {
-    transform: perspective(var(--cube-perspective)) rotateY(0deg);
-    filter: blur(0);
+    transform: perspective(1000px) rotateY(0deg);
+    opacity: 1;
   }
 }
 
 @keyframes flipLeftIn {
   0% {
-    transform: perspective(var(--cube-perspective)) rotateY(var(--cube-rotate));
-    filter: blur(var(--blur-amount));
+    transform: perspective(1000px) rotateY(90deg);
+    opacity: 0;
   }
   100% {
-    transform: perspective(var(--cube-perspective)) rotateY(0deg);
-    filter: blur(0);
+    transform: perspective(1000px) rotateY(0deg);
+    opacity: 1;
   }
 }
 
@@ -137,22 +137,15 @@
   }
 
   .mask-visible {
-    transform-style: preserve-3d;
-    animation: floatAndFade 1200ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    backface-visibility: hidden;
-    will-change: transform, opacity, filter;
-    transform-origin: center center;
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
   }
 
   .mask-hidden {
     opacity: 0;
-    transform: scale(1) translateZ(0);
-    transition: all 800ms cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
-    filter: blur(var(--blur-amount));
-    backface-visibility: hidden;
-    will-change: transform, opacity, filter;
-    transform-origin: center center;
+    transform: scale(0.95);
+    filter: blur(8px);
   }
 
   .flip-right-out {
@@ -167,12 +160,10 @@
 
   .flip-right-in {
     animation: flipRightIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    transform-origin: center left;
   }
 
   .flip-left-in {
     animation: flipLeftIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    transform-origin: center right;
   }
 
   .slide-right-out {
@@ -279,14 +270,16 @@ div:hover .noise-overlay {
   will-change: transform, opacity, filter;
   width: 100%;
   height: 100%;
+  transition: all 600ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.video-container {
+.video-container,
+.image-container {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  transition: all 600ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .video-tile {
@@ -298,10 +291,6 @@ div:hover .noise-overlay {
 }
 
 .image-container {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
