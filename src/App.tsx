@@ -27,12 +27,11 @@ function App() {
   const [showControls, setShowControls] = useState(false);
   const [isFlipping, setIsFlipping] = useState(false);
   const [mediaSlots, setMediaSlots] = useState(defaultMediaSlots);
-  const [loadingStates, setLoadingStates] = useState<{ [key: string]: boolean }>({});
   const [preloadedVideos, setPreloadedVideos] = useState<{ [key: string]: HTMLVideoElement }>({});
 
   // Locked settings
   const rows = 1;
-  const cols = 8;
+  const cols = 1;
   const cornerRadius = 0;
   const numLayers = 4;
   const floatScale = 1;
@@ -41,21 +40,21 @@ function App() {
   const blurAmount = 0;
 
   const [positions, setPositions] = useState<Position[]>(
-    Array.from({ length: 1 }, () => ({
+    Array.from({ length: cols }, () => ({
       activeLayer: 0,
       transitionDelay: 0,
       flipDirection: null
     }))
   );
   
-  const fileInputRefs = useRef<(HTMLInputElement | null)[]>(Array(1).fill(null));
+  const fileInputRefs = useRef<(HTMLInputElement | null)[]>(Array(cols).fill(null));
   const videoRefs = useRef<(HTMLVideoElement | null)[][]>(
-    Array(numLayers).fill(null).map(() => Array(1).fill(null))
+    Array(numLayers).fill(null).map(() => Array(cols).fill(null))
   );
   const fullscreenVideoRefs = useRef<(HTMLVideoElement | null)[]>(Array(numLayers).fill(null));
-  const cellRefs = useRef<(HTMLDivElement | null)[]>(Array(1).fill(null));
+  const cellRefs = useRef<(HTMLDivElement | null)[]>(Array(cols).fill(null));
 
-  const getOriginalPosition = () => ({
+  const getOriginalPosition = (index: number) => ({
     x: 50,
     y: 50
   });
@@ -155,7 +154,7 @@ function App() {
         updatedPositions[0] = {
           activeLayer: nextLayer,
           transitionDelay: 0,
-          backgroundPosition: getOriginalPosition(),
+          backgroundPosition: getOriginalPosition(0),
           flipDirection: newFlipDirection,
         };
 
@@ -192,11 +191,6 @@ function App() {
       preloadVideo(nextVideoUrl);
     }
   }, [positions, mediaSlots, isMobile]);
-
-  // Update video loading states
-  const handleVideoLoading = (url: string, isLoading: boolean) => {
-    setLoadingStates(prev => ({ ...prev, [url]: isLoading }));
-  };
 
   useEffect(() => {
     document.documentElement.style.setProperty('--float-scale', floatScale.toString());
@@ -278,11 +272,6 @@ useEffect(() => {
 
           {mediaSlots[layerIndex]?.a.type === 'video' ? (
             <div className="relative w-full h-full">
-              {loadingStates[mediaSlots[layerIndex]?.a.url] && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
-                  <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
-                </div>
-              )}
               <video
                 ref={el => {
                   fullscreenVideoRefs.current[layerIndex] = el;
@@ -293,10 +282,6 @@ useEffect(() => {
                     });
                     el.addEventListener('loadeddata', () => {
                       console.log('Video loaded:', el.src);
-                      handleVideoLoading(el.src, false);
-                    });
-                    el.addEventListener('waiting', () => {
-                      handleVideoLoading(el.src, true);
                     });
                   }
                 }}
@@ -412,50 +397,53 @@ useEffect(() => {
               key={layerIndex}
               className={`grid-layer ${positions[0]?.activeLayer === layerIndex ? 'active' : 'inactive'}`}
             >
-              <div
-                ref={el => cellRefs.current[0] = el}
-                className={`grid-cell ${positions[0]?.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'} ${
-                  positions[0]?.flipDirection === 'right' ? 'flip-right-in' : 
-                  positions[0]?.flipDirection === 'left' ? 'flip-left-in' : ''
-                }`}
-                style={{
-                  borderRadius: `${cornerRadius}px`,
-                  transitionDelay: `${positions[0]?.transitionDelay}ms`,
-                  gridColumn: '1 / -1',
-                  gridRow: '1 / span 1'
-                }}
-              >
-                {mediaSlots[layerIndex]?.b.type === 'video' ? (
-                  <div className="video-container">
-                    <video
-                      ref={el => {
-                        if (videoRefs.current[layerIndex]) {
-                          videoRefs.current[layerIndex][0] = el;
-                        }
+              {positions.map((pos, i) => (
+                <div
+                  key={`mask${layerIndex}-${i}`}
+                  ref={el => cellRefs.current[i] = el}
+                  className={`grid-cell ${pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'} ${
+                    pos.flipDirection === 'right' ? 'flip-right-in' : 
+                    pos.flipDirection === 'left' ? 'flip-left-in' : ''
+                  }`}
+                  style={{
+                    borderRadius: `${cornerRadius}px`,
+                    transitionDelay: `${pos.transitionDelay}ms`,
+                    gridColumn: `${i + 1} / span 1`,
+                    gridRow: '1 / span 1'
+                  }}
+                >
+                  {mediaSlots[layerIndex]?.b.type === 'video' ? (
+                    <div className="video-container">
+                      <video
+                        ref={el => {
+                          if (videoRefs.current[layerIndex]) {
+                            videoRefs.current[layerIndex][i] = el;
+                          }
+                        }}
+                        onTimeUpdate={(e) => handleVideoTimeUpdate(e, layerIndex, i)}
+                        className="video-tile"
+                        src={isMobile && mediaSlots[layerIndex]?.b.mobileUrl ? mediaSlots[layerIndex].b.mobileUrl : mediaSlots[layerIndex].b.url}
+                        poster={mediaSlots[layerIndex]?.b.fallbackUrl || ''}
+                        muted
+                        playsInline
+                        loop
+                        autoPlay
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="image-container"
+                      style={{
+                        backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat'
                       }}
-                      onTimeUpdate={(e) => handleVideoTimeUpdate(e, layerIndex, 0)}
-                      className="video-tile"
-                      src={isMobile && mediaSlots[layerIndex]?.b.mobileUrl ? mediaSlots[layerIndex].b.mobileUrl : mediaSlots[layerIndex].b.url}
-                      poster={mediaSlots[layerIndex]?.b.fallbackUrl || ''}
-                      muted
-                      playsInline
-                      loop
-                      autoPlay
                     />
-                  </div>
-                ) : (
-                  <div
-                    className="image-container"
-                    style={{
-                      backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      backgroundRepeat: 'no-repeat'
-                    }}
-                  />
-                )}
-                <div className="noise-overlay" />
-              </div>
+                  )}
+                  <div className="noise-overlay" />
+                </div>
+              ))}
             </div>
           ))}
         </div>
