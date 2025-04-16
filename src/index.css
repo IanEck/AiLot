@@ -243,9 +243,12 @@ div:hover .noise-overlay {
   inset: 0;
   display: grid;
   grid-template-columns: repeat(var(--grid-cols), 1fr);
-  grid-template-rows: repeat(var(--grid-rows), 1fr);
+  grid-template-rows: 1fr;
   gap: var(--grid-gap);
   padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .grid-layer {
@@ -253,10 +256,13 @@ div:hover .noise-overlay {
   inset: 0;
   display: grid;
   grid-template-columns: repeat(var(--grid-cols), 1fr);
-  grid-template-rows: repeat(var(--grid-rows), 1fr);
+  grid-template-rows: 1fr;
   gap: var(--grid-gap);
   padding: 0;
   z-index: 10;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .grid-layer.inactive {
@@ -271,23 +277,39 @@ div:hover .noise-overlay {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   will-change: transform, opacity, filter;
+  width: 100%;
+  height: 100%;
 }
 
-.video-container,
-.image-container {
+.video-container {
   position: absolute;
   inset: 0;
-  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  will-change: transform, opacity, filter;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .video-tile {
   position: absolute;
-  width: calc(100% * var(--grid-cols));
-  height: calc(100% * var(--grid-rows));
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
+}
+
+.image-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Update the video position calculation */
+.video-tile {
+  --video-pos: center;
   object-position: var(--video-pos) !important;
 }
 

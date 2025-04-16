@@ -32,7 +32,7 @@ function App() {
 
   // Locked settings
   const rows = 1;
-  const cols = 1;
+  const cols = 8;
   const cornerRadius = 0;
   const numLayers = 4;
   const floatScale = 1;
@@ -41,23 +41,23 @@ function App() {
   const blurAmount = 0;
 
   const [positions, setPositions] = useState<Position[]>(
-    Array.from({ length: rows * cols }, () => ({
+    Array.from({ length: 1 }, () => ({
       activeLayer: 0,
       transitionDelay: 0,
       flipDirection: null
     }))
   );
   
-  const fileInputRefs = useRef<(HTMLInputElement | null)[]>(Array(8).fill(null));
+  const fileInputRefs = useRef<(HTMLInputElement | null)[]>(Array(1).fill(null));
   const videoRefs = useRef<(HTMLVideoElement | null)[][]>(
-    Array(numLayers).fill(null).map(() => Array(rows * cols).fill(null))
+    Array(numLayers).fill(null).map(() => Array(1).fill(null))
   );
   const fullscreenVideoRefs = useRef<(HTMLVideoElement | null)[]>(Array(numLayers).fill(null));
-  const cellRefs = useRef<(HTMLDivElement | null)[]>(Array(rows * cols).fill(null));
+  const cellRefs = useRef<(HTMLDivElement | null)[]>(Array(1).fill(null));
 
-  const getOriginalPosition = (index: number) => ({
-    x: (index % cols) * (100 / cols),
-    y: Math.floor(index / cols) * (100 / rows)
+  const getOriginalPosition = () => ({
+    x: 50,
+    y: 50
   });
   
 
@@ -187,7 +187,7 @@ function App() {
             updatedPositions[index] = {
               activeLayer: nextLayer,
               transitionDelay: 0,
-              backgroundPosition: getOriginalPosition(index),
+              backgroundPosition: getOriginalPosition(),
               flipDirection: newFlipDirection,
             };
 
@@ -453,106 +453,47 @@ useEffect(() => {
               key={layerIndex}
               className={`grid-layer ${positions[0]?.activeLayer === layerIndex ? 'active' : 'inactive'}`}
             >
-              {positions.map((pos, i) => (
-                <div
-                  key={`mask${layerIndex}-${i}`}
-                  ref={el => cellRefs.current[i] = el}
-                  className={`grid-cell ${pos.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'}`}
-                  style={{
-                    borderRadius: `${cornerRadius}px`,
-                    transitionDelay: `${pos.transitionDelay}ms`,
-                    gridColumn: `${(i % cols) + 1} / span 1`,
-                    gridRow: `${Math.floor(i / cols) + 1} / span 1`
-                  }}
-                >
-                  {mediaSlots[layerIndex]?.b.type === 'video' ? (
-                    <div
-                      className={`video-container ${
-                        pos.activeLayer === layerIndex
-                          ? isMobile
-                            ? pos.flipDirection === 'right'
-                              ? 'slide-left-in'
-                              : pos.flipDirection === 'left'
-                                ? 'slide-right-in'
-                                : ''
-                            : pos.flipDirection === 'right'
-                              ? 'slide-right-in'
-                              : pos.flipDirection === 'left'
-                                ? 'slide-left-in'
-                                : ''
-                          : isMobile
-                            ? pos.flipDirection === 'right'
-                              ? 'slide-left-out'
-                              : pos.flipDirection === 'left'
-                                ? 'slide-right-out'
-                                : ''
-                            : pos.flipDirection === 'right'
-                              ? 'slide-right-out'
-                              : pos.flipDirection === 'left'
-                                ? 'slide-left-out'
-                                : ''
-                      }`}
-                    >
-                      <video
-                        ref={el => {
-                          if (videoRefs.current[layerIndex]) {
-                            videoRefs.current[layerIndex][i] = el;
-                          }
-                        }}
-                        onTimeUpdate={(e) => handleVideoTimeUpdate(e, layerIndex, i)}
-                        style={{
-                          '--video-pos': pos.backgroundPosition
-                            ? `${pos.backgroundPosition.x}% ${pos.backgroundPosition.y}%`
-                            : `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`
-                        } as React.CSSProperties}
-                        className="video-tile"
-                        src={isMobile && mediaSlots[layerIndex]?.b.mobileUrl ? mediaSlots[layerIndex].b.mobileUrl : mediaSlots[layerIndex].b.url}
-                        poster={mediaSlots[layerIndex]?.b.fallbackUrl || ''}
-                        muted
-                        playsInline
-                        loop
-                        autoPlay
-                      />
-                    </div>
-                  ) : (
-                    <div
-                      className={`image-container ${
-                        pos.activeLayer === layerIndex
-                          ? isMobile
-                            ? pos.flipDirection === 'right'
-                              ? 'slide-left-in'
-                              : pos.flipDirection === 'left'
-                                ? 'slide-right-in'
-                                : ''
-                            : pos.flipDirection === 'right'
-                              ? 'slide-right-in'
-                              : pos.flipDirection === 'left'
-                                ? 'slide-left-in'
-                                : ''
-                          : isMobile
-                            ? pos.flipDirection === 'right'
-                              ? 'slide-left-out'
-                              : pos.flipDirection === 'left'
-                                ? 'slide-right-out'
-                                : ''
-                            : pos.flipDirection === 'right'
-                              ? 'slide-right-out'
-                              : pos.flipDirection === 'left'
-                                ? 'slide-left-out'
-                                : ''
-                      }`}
-                      style={{
-                        backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
-                        backgroundSize: `${cols * 100}% ${rows * 100}%`,
-                        backgroundPosition: `${(i % cols) * (100 / cols)}% ${Math.floor(i / cols) * (100 / rows)}%`,
-                        backgroundRepeat: 'no-repeat',
-                        border: '1px solid black',
+              <div
+                ref={el => cellRefs.current[0] = el}
+                className={`grid-cell ${positions[0]?.activeLayer === layerIndex ? 'mask-visible' : 'mask-hidden'}`}
+                style={{
+                  borderRadius: `${cornerRadius}px`,
+                  transitionDelay: `${positions[0]?.transitionDelay}ms`,
+                  gridColumn: `1 / span ${cols}`,
+                  gridRow: '1 / span 1'
+                }}
+              >
+                {mediaSlots[layerIndex]?.b.type === 'video' ? (
+                  <div className="video-container">
+                    <video
+                      ref={el => {
+                        if (videoRefs.current[layerIndex]) {
+                          videoRefs.current[layerIndex][0] = el;
+                        }
                       }}
+                      onTimeUpdate={(e) => handleVideoTimeUpdate(e, layerIndex, 0)}
+                      className="video-tile"
+                      src={isMobile && mediaSlots[layerIndex]?.b.mobileUrl ? mediaSlots[layerIndex].b.mobileUrl : mediaSlots[layerIndex].b.url}
+                      poster={mediaSlots[layerIndex]?.b.fallbackUrl || ''}
+                      muted
+                      playsInline
+                      loop
+                      autoPlay
                     />
-                  )}
-                  <div className="noise-overlay" />
-                </div>
-              ))}
+                  </div>
+                ) : (
+                  <div
+                    className="image-container"
+                    style={{
+                      backgroundImage: `url("${mediaSlots[layerIndex]?.b.url}")`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat'
+                    }}
+                  />
+                )}
+                <div className="noise-overlay" />
+              </div>
             </div>
           ))}
         </div>
