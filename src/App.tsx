@@ -237,7 +237,7 @@ useEffect(() => {
     textAlign: 'center',
   }}
   className="rounded-none border border-black"
-  onClick={() => window.open("https://tally.so/r/npEV2V", "_blank")}
+  onClick={() => window.open("https://tally.so/r/3XaqXV", "_blank")}
 >
   LEARN MORE
 </button>
@@ -445,3 +445,4 @@ useEffect(() => {
 
 
 export default App;
+
