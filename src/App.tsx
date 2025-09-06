@@ -237,9 +237,9 @@ useEffect(() => {
     textAlign: 'center',
   }}
   className="rounded-none border border-black"
-  onClick={() => window.open("https://lu.ma/aionthelot", "_blank")}
+  onClick={() => window.open("https://tally.so/r/npEV2V", "_blank")}
 >
-  BUY TICKETS
+  LEARN MORE
 </button>
 
             <button
@@ -442,5 +442,6 @@ useEffect(() => {
     </div>
   );
 }
+
 
 export default App;
